@@ -86,8 +86,21 @@ GLFWwindow inline *mkwin(int width,int height,const char* title,GLFWmonitor* mon
     return glfwCreateWindow(width,height,title,monitor,share);
 }
 //Shaders
-class shader_compilation_error:public std::logic_error{
-    using std::logic_error::logic_error;
+class shader_compilation_error:std::exception{
+    private:
+        std::string reason;
+        const char *reason_cstr;
+    public:
+        shader_compilation_error(std::string reason){
+            this->reason = reason;
+            this->reason_cstr = reason.c_str();
+        }
+        std::string inline getwhat() const{
+            return reason;
+        }
+        const char inline *what() const noexcept{
+            return reason_cstr;
+        }
 };
 class program_linking_error:public std::logic_error{
     using std::logic_error::logic_error;

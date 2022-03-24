@@ -53,13 +53,21 @@ int main(){
         cout << "GLAD loading failed!" << endl;
         exit(-1);
     }
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-
     glfwSetFramebufferSizeCallback(win,onresize);
 
-    Shader shdr = Shader(loadStringFile(""),loadStringFile(""));
+    try{
+        Shader shdr = Shader(loadStringFile("vertex.glsl"),loadStringFile("fragment.glsl"));
+    }catch(shader_compilation_error &e){
+        cout << e.getwhat() << endl;
+    }
+    float vdata[] = {
+        -1.0,-1.0,0.0,
+        -1.0,1.0,0.0,
+        1.0,1.0,0.0,
+        1.0,1.0,0.0,
+        1.0,-1.0,0.0,
+        -1.0,-1.0,0.0
+    };
 
     while(!glfwWindowShouldClose(win)){
         glfwPollEvents();
